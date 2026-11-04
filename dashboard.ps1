@@ -34,24 +34,27 @@ $t2 = New-Object Windows.Forms.TabPage 'Manual steps'
 $tabs.TabPages.AddRange(@($t1, $t2)); $form.Controls.Add($tabs)
 
 # ---- Tab 1: Clean up ----
+# docked panels so nothing is cut off: output fills the middle, buttons stay at the bottom
+$out = New-Object Windows.Forms.TextBox
+$out.Multiline = $true; $out.ReadOnly = $true; $out.ScrollBars = 'Vertical'
+$out.Font = 'Consolas,9'; $out.Dock = 'Fill'
+$out.Text = 'Press Scan to see what would happen.'; $t1.Controls.Add($out)
+
+$bot = New-Object Windows.Forms.Panel; $bot.Dock = 'Bottom'; $bot.Height = 80; $t1.Controls.Add($bot)
+$status = New-Object Windows.Forms.Label
+$status.Location = '12,6'; $status.Size = '700,22'; $bot.Controls.Add($status)
+
+$top = New-Object Windows.Forms.Panel; $top.Dock = 'Top'; $top.Height = 250; $t1.Controls.Add($top)
 $intro = New-Object Windows.Forms.Label
 $intro.Text = "A quality-of-life tool by Mondcrest Automations.`r`nTick what you want, press Scan to preview (nothing changes), then Clean up."
-$intro.Location = '12,10'; $intro.Size = '700,44'; $t1.Controls.Add($intro)
+$intro.Location = '12,10'; $intro.Size = '700,44'; $top.Controls.Add($intro)
 
 $checks = @{}
 $y = 60
 foreach ($s in $steps) {
   $c = New-Object Windows.Forms.CheckBox; $c.Text = $s.Text; $c.Checked = $s.On
-  $c.Location = "16,$y"; $c.Size = '700,24'; $t1.Controls.Add($c); $checks[$s.Key] = $c; $y += 28
+  $c.Location = "16,$y"; $c.Size = '700,26'; $top.Controls.Add($c); $checks[$s.Key] = $c; $y += 30
 }
-
-$out = New-Object Windows.Forms.TextBox
-$out.Multiline = $true; $out.ReadOnly = $true; $out.ScrollBars = 'Vertical'
-$out.Font = 'Consolas,9'; $out.Location = '12,290'; $out.Size = '706,250'
-$out.Text = 'Press Scan to see what would happen.'; $t1.Controls.Add($out)
-
-$status = New-Object Windows.Forms.Label
-$status.Location = '12,548'; $status.Size = '706,22'; $t1.Controls.Add($status)
 
 function Selected { ($steps | Where-Object { $checks[$_.Key].Checked } | ForEach-Object { $_.Key }) -join ',' }
 
@@ -67,13 +70,13 @@ function Start-Run([bool]$apply) {
   $timer.Start()
 }
 
-$scan  = New-Btn 'Scan (safe preview)' 12 574 180 { Start-Run $false }
-$clean = New-Btn 'Clean up' 204 574 160 {
+$scan  = New-Btn 'Scan (safe preview)' 12 34 200 { Start-Run $false }
+$clean = New-Btn 'Clean up' 224 34 160 {
   $m = "This will make the changes listed by Scan.`r`n`r`nCreate a restore point first (Manual steps tab). Continue?"
   if ($checks['Dev'].Checked) { $m = "Developer option is ticked: node_modules, .venv and .next folders will be DELETED.`r`n`r`n" + $m }
   if ([Windows.Forms.MessageBox]::Show($m, 'Confirm', 'YesNo', 'Warning') -eq 'Yes') { Start-Run $true }
 }
-$t1.Controls.AddRange(@($scan, $clean))
+$bot.Controls.AddRange(@($scan, $clean))
 
 $timer = New-Object Windows.Forms.Timer; $timer.Interval = 600
 $timer.add_Tick({

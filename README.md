@@ -38,7 +38,12 @@ Dism.exe /online /Cleanup-Image /StartComponentCleanup
 ```
 Remove `Windows.old` via Settings > System > Storage > Temporary files. After Docker pruning, run `wsl --shutdown` and `Optimize-VHD` on `docker_data.vhdx` to reclaim the disk file.
 
+## Requirements
+Windows 11 (Windows 10 mostly works), built-in Windows PowerShell 5.1. No installs, no admin needed for the dashboard or script; only the manual DISM step needs admin.
+
 ## Safety
 No registry hacks, no telemetry service tweaks, no remote scripts, nothing downloaded. Read `debloat.ps1` before running; it is one file. Create a restore point first.
 
-MIT licensed.
+Provided as is, with no warranty. You run it at your own risk, so scan first and make a restore point.
+
+MIT licensed. Made by [Mondcrest Automations](https://mondcrest.com), a B2B AI agency.
