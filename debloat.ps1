@@ -10,7 +10,7 @@
 [CmdletBinding()]
 param(
   [switch]$Apply,
-  [ValidateSet('Temp','Startup','Apps','Power','Docker','Dev')][string[]]$Only,
+  [string[]]$Only,  # Temp,Startup,Apps,Power,Docker,Dev (comma list also works via powershell -File)
   [string[]]$StartupOff = @('Teams','Discord','Steam','Spotify','Opera GX Stable','Opera GX Browser Assistant','BraveSoftware Update','RobloxPlayerBeta','Microsoft.Lists','Docker Desktop','OneDriveSetup'),
   [string[]]$Apps = @('Microsoft.BingNews','Microsoft.BingWeather','Microsoft.BingSearch','Clipchamp.Clipchamp','Microsoft.Todos','Microsoft.ZuneMusic','Microsoft.ZuneVideo','Microsoft.People','Microsoft.WindowsMaps','Microsoft.MixedReality.Portal','Microsoft.PowerAutomateDesktop','Microsoft.MicrosoftOfficeHub','Microsoft.GetHelp','Microsoft.WindowsFeedbackHub','Microsoft.WidgetsPlatformRuntime','Microsoft.YourPhone','MSTeams'),
   [int]$TempDays = 2,
@@ -19,6 +19,11 @@ param(
 # ponytail: Xbox apps are left alone on purpose (Minecraft/Game Pass sign-in needs them).
 # ponytail: Docker volumes are never pruned. Only build cache + unused images.
 
+if ($Only) {
+  $Only = $Only -split ',' | ForEach-Object { $_.Trim() } | Where-Object { $_ }
+  $bad = $Only | Where-Object { 'Temp','Startup','Apps','Power','Docker','Dev' -notcontains $_ }
+  if ($bad) { throw "Unknown step(s): $($bad -join ', '). Valid: Temp,Startup,Apps,Power,Docker,Dev" }
+}
 $on = { param($s) (-not $Only) -or ($Only -contains $s) }
 $mode = if ($Apply) { 'APPLY' } else { 'DRY RUN' }
 $freeBefore = (Get-PSDrive C).Free
@@ -41,8 +46,10 @@ if (& $on 'Startup') {
   $run = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Run'
   $sa  = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run'
   $have = (Get-ItemProperty $run).PSObject.Properties.Name
+  $state = Get-ItemProperty $sa -ErrorAction SilentlyContinue
   foreach ($n in $have) {
-    if ($StartupOff -contains $n -or $n -like 'MicrosoftEdgeAutoLaunch*') {
+    $already = $state -and $state.$n -and ($state.$n[0] -in 1,3,7)  # odd first byte = disabled
+    if (-not $already -and ($StartupOff -contains $n -or $n -like 'MicrosoftEdgeAutoLaunch*')) {
       "would disable: $n"
       if ($Apply) { Set-ItemProperty $sa -Name $n -Value $disabled -Type Binary }
     }
