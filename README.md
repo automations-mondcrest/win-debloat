@@ -3,7 +3,7 @@
 > **A quality-of-life side project.** Built and shared by [Mondcrest Automations](https://mondcrest.com), a B2B AI agency. It is not part of our agency services.
 
 > ## ⚠️ IMPORTANT: create a System Restore point first
-> Before you click **Clean up** (or run with `-Apply`), create a Windows **System Restore point** so you can roll back if anything goes wrong: press Start, type "Create a restore point", choose your C: drive and click **Create**. The dashboard's Manual steps tab opens this for you. This tool has been tested on one Windows 11 PC only. You use it at your own risk.
+> Before you click **Clean up** (or run with `-Apply`), create a Windows **System Restore point** so you can roll back if anything goes wrong: press Start, type "Create a restore point", choose your C: drive and click **Create**. The dashboard's Manual steps tab opens this for you. This tool has been tested on a Windows 11 PC and a Windows 10 laptop. You use it at your own risk.
 
 A safe, reversible Windows 11 cleanup. **Dry run by default**: it only reports until you click Clean up (or pass `-Apply`).
 
@@ -47,7 +47,7 @@ Dism.exe /online /Cleanup-Image /StartComponentCleanup
 Remove `Windows.old` via Settings > System > Storage > Temporary files. After Docker pruning, run `wsl --shutdown` and `Optimize-VHD` on `docker_data.vhdx` to reclaim the disk file.
 
 ## Requirements
-Windows 11 (Windows 10 mostly works), built-in Windows PowerShell 5.1. No installs, no admin needed for the dashboard or script; only the manual DISM step needs admin.
+Windows 11 or Windows 10 (both tested), built-in Windows PowerShell 5.1. No installs, no admin needed for the dashboard or script; only the manual DISM step needs admin.
 
 ## Safety
 No registry hacks, no telemetry service tweaks, no remote scripts, nothing downloaded. Read `debloat.ps1` before running; it is one file. Create a restore point first.

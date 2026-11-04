@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.0.2 - 2026-11-04
+- Docs: now verified on a Windows 11 PC and a Windows 10 laptop (about 20 GB freed on the laptop). The restore point warning is unchanged.
+
 ## 1.0.1 - 2026-11-04
 - Added a prominent System Restore point warning to the README and the dashboard. Documented that it is tested on one Windows 11 PC.
 
