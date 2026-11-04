@@ -2,7 +2,7 @@
 .SYNOPSIS
   Point-and-click window for debloat.ps1. Double-click Start-Dashboard.cmd to open it.
 #>
-param([switch]$SelfTest)
+param([switch]$SelfTest, [switch]$AutoScan, [int]$StartTab = 0)  # -AutoScan/-StartTab: used to take README screenshots
 Add-Type -AssemblyName System.Windows.Forms, System.Drawing
 [System.Windows.Forms.Application]::EnableVisualStyles()
 
@@ -83,7 +83,7 @@ $timer.add_Tick({
   try {
     $fs = [IO.File]::Open($script:log, 'Open', 'Read', 'ReadWrite')
     $txt = (New-Object IO.StreamReader $fs).ReadToEnd(); $fs.Close()
-    if ($txt) { $out.Text = $txt; $out.SelectionStart = $out.Text.Length; $out.ScrollToCaret() }
+    if ($txt) { $out.Text = ($txt -replace "`r?`n|`r", "`r`n"); $out.SelectionStart = $out.Text.Length; $out.ScrollToCaret() }
   } catch {}
   if ($script:proc -and $script:proc.HasExited) {
     $timer.Stop(); $scan.Enabled = $true; $clean.Enabled = $true; $status.Text = 'Done.'
@@ -123,4 +123,6 @@ if ($SelfTest) {
   "tabs=$($tabs.TabPages.Count) checks=$($checks.Count) manual=$($panel.Controls.Count) engine=$(Test-Path $engine)"
   return
 }
+$tabs.SelectedIndex = $StartTab
+$form.add_Shown({ if ($AutoScan) { Start-Run $false } })
 $form.ShowDialog() | Out-Null

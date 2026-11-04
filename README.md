@@ -10,6 +10,11 @@ A safe, reversible Windows 11 cleanup. **Dry run by default**: it only reports u
 3. Tick what you want, press **Scan** to preview (nothing changes), then **Clean up**.
 4. The **Manual steps** tab walks you through the parts Windows requires you to do yourself: restore point, Windows.old, the update-store cleanup (admin), startup apps, drivers, Docker disk shrink, restart.
 
+![Scan preview in the dashboard](docs/dashboard-scan.png)
+![Manual steps tab](docs/dashboard-manual.png)
+
+> **Review the lists first.** The default startup and app lists (Steam, Discord, Opera GX, Roblox, Clipchamp...) are common bloat but may include things you use. Scan shows exactly what would change before anything happens, and you can edit the lists with `-StartupOff` and `-Apps`.
+
 ## Command line
 One PowerShell script, `debloat.ps1`:
 
