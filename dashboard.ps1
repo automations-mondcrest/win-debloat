@@ -44,13 +44,17 @@ $bot = New-Object Windows.Forms.Panel; $bot.Dock = 'Bottom'; $bot.Height = 80; $
 $status = New-Object Windows.Forms.Label
 $status.Location = '12,6'; $status.Size = '700,22'; $bot.Controls.Add($status)
 
-$top = New-Object Windows.Forms.Panel; $top.Dock = 'Top'; $top.Height = 250; $t1.Controls.Add($top)
+$top = New-Object Windows.Forms.Panel; $top.Dock = 'Top'; $top.Height = 272; $t1.Controls.Add($top)
 $intro = New-Object Windows.Forms.Label
 $intro.Text = "A quality-of-life tool by Mondcrest Automations.`r`nTick what you want, press Scan to preview (nothing changes), then Clean up."
 $intro.Location = '12,10'; $intro.Size = '700,44'; $top.Controls.Add($intro)
+$warn = New-Object Windows.Forms.Label
+$warn.Text = 'IMPORTANT: create a System Restore point before you click Clean up (Manual steps tab, step 1).'
+$warn.Font = 'Segoe UI,9.5,style=Bold'; $warn.ForeColor = 'Firebrick'
+$warn.Location = '12,48'; $warn.Size = '700,22'; $top.Controls.Add($warn)
 
 $checks = @{}
-$y = 60
+$y = 82
 foreach ($s in $steps) {
   $c = New-Object Windows.Forms.CheckBox; $c.Text = $s.Text; $c.Checked = $s.On
   $c.Location = "16,$y"; $c.Size = '700,26'; $top.Controls.Add($c); $checks[$s.Key] = $c; $y += 30

@@ -2,6 +2,9 @@
 
 > **A quality-of-life side project.** Built and shared by [Mondcrest Automations](https://mondcrest.com), a B2B AI agency. It is not part of our agency services.
 
+> ## ⚠️ IMPORTANT: create a System Restore point first
+> Before you click **Clean up** (or run with `-Apply`), create a Windows **System Restore point** so you can roll back if anything goes wrong: press Start, type "Create a restore point", choose your C: drive and click **Create**. The dashboard's Manual steps tab opens this for you. This tool has been tested on one Windows 11 PC only. You use it at your own risk.
+
 A safe, reversible Windows 11 cleanup. **Dry run by default**: it only reports until you click Clean up (or pass `-Apply`).
 
 ## Easiest way: the dashboard (no technical skills needed)
