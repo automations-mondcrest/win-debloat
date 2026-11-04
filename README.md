@@ -2,7 +2,16 @@
 
 > **A quality-of-life side project.** Built and shared by [Mondcrest Automations](https://mondcrest.com), a B2B AI agency. It is not part of our agency services.
 
-One PowerShell script for a safe, reversible Windows 11 cleanup. **Dry run by default**: it only reports until you pass `-Apply`.
+A safe, reversible Windows 11 cleanup. **Dry run by default**: it only reports until you click Clean up (or pass `-Apply`).
+
+## Easiest way: the dashboard (no technical skills needed)
+1. Click **Code > Download ZIP** on this page and unzip it.
+2. Double-click **`Start-Dashboard.cmd`**. (If Windows warns, choose More info > Run anyway.)
+3. Tick what you want, press **Scan** to preview (nothing changes), then **Clean up**.
+4. The **Manual steps** tab walks you through the parts Windows requires you to do yourself: restore point, Windows.old, the update-store cleanup (admin), startup apps, drivers, Docker disk shrink, restart.
+
+## Command line
+One PowerShell script, `debloat.ps1`:
 
 ```powershell
 .\debloat.ps1                         # report what it would do
